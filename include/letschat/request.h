@@ -6,4 +6,4 @@
 #   define private(x) __PRIVATE_MODIFIER(x)
 #endif
 
-#endif
+#endif // __REQUEST__
