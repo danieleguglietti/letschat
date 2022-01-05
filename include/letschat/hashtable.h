@@ -19,14 +19,14 @@ typedef struct entry
 
 typedef struct hashtable
 {
-    /* PUBLIC */
+    // * PUBLIC
     uint32_t size;
 
-    /* PRIVATES */
+    // * PRIVATES
     entry_t** private(entries);
     uint32_t private(capacity);
 
-    /* METHODS */
+    // * METHODS
     entry_t* (*get)(struct hashtable* table, const char* key);
     bool (*set)(struct hashtable* table, const char* key, char* value);
 } hashtable_t;
