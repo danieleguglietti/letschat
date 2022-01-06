@@ -46,7 +46,7 @@ typedef struct request
      * @param request The object to serilized.
      * @return char* The serilized string.
      */
-    char* (*serialize)(struct request* request);
+    char* (*serialize)(const struct request* request);
 } request_t;
 
 /**
