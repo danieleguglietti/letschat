@@ -25,8 +25,7 @@ headers_t headers_parse(const char* raw_headers)
         return NULL;
     }
 
-    char* src = strdup(raw_headers);
-    char* ctx = calloc(1, sizeof *ctx);
+    char* src = strdup(raw_headers), *ctx;
 
     char* header = strtok_r(src, ";", &ctx);
 
@@ -40,7 +39,6 @@ headers_t headers_parse(const char* raw_headers)
             hashtable_free(headers);
             free(value);
             free(src);
-            free(ctx);
             free(key);
             return NULL;
         }
@@ -54,12 +52,10 @@ headers_t headers_parse(const char* raw_headers)
     {
         hashtable_free(headers);
         free(src);
-        free(ctx);
         return NULL;
     }
 
     free(src);
-    free(ctx);
     return headers;
 }
 
