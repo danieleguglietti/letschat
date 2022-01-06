@@ -39,7 +39,23 @@ typedef struct request
 
     // * PRIVATES
     const char* private(raw);
+
+    // * METHODS
+    /**
+     * @brief Serialize a request object into a string.
+     * @param request The object to serilized.
+     * @return char* The serilized string.
+     */
+    char* (*serialize)(struct request* request);
 } request_t;
+
+/**
+ * @brief Parse the raw requst string into a request object
+ * 
+ * @param raw_request The raw request message.
+ * @return request_t* The request object.
+ */
+request_t* request_parse(const char* raw_request);
 
 #ifdef __cplusplus
 }
