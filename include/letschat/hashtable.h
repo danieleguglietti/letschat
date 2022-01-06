@@ -4,9 +4,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#ifndef __PRIVATE_MODIFIER
-#   define __PRIVATE_MODIFIER(x) __##x
-#   define private(x) __PRIVATE_MODIFIER(x)
+#ifndef __PRIVATE_MODIFIER__
+#   define __PRIVATE_MODIFIER__(x) __##x
+#   define private(x) __PRIVATE_MODIFIER__(x)
 #endif
 
 #define HASHTABLE_STARTLEN 16
