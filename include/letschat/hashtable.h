@@ -1,15 +1,19 @@
 #ifndef __HASHTABLE__
 #define __HASHTABLE__
 
-#include <stdint.h>
-#include <stdbool.h>
-
 #ifndef __PRIVATE_MODIFIER__
 #   define __PRIVATE_MODIFIER__(x) __##x
 #   define private(x) __PRIVATE_MODIFIER__(x)
 #endif
 
 #define HASHTABLE_STARTLEN 16
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
+#include <stdbool.h>
 
 typedef struct entry
 {
@@ -45,5 +49,9 @@ hashtable_t* hashtable_new();
  * @param table The hashtable to delete.
  */
 void hashtable_free(hashtable_t* table);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __HASHTABLE__

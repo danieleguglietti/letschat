@@ -3,6 +3,10 @@
 
 #include "hashtable.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef hashtable_t* headers_t;
 typedef entry_t* header_t;
 
@@ -24,5 +28,9 @@ headers_t headers_parse(const char* raw_headers);
  * @return char* The serialized headers list string
  */
 char* headers_serialize(headers_t headers);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __HEADERS__

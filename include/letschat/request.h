@@ -15,6 +15,10 @@
 
 #include "headers.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef enum command
 {
     CONNECT,
@@ -36,5 +40,9 @@ typedef struct request
     // * PRIVATES
     const char* private(raw);
 } request_t;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __REQUEST__
