@@ -14,9 +14,17 @@ FetchContent_MakeAvailable(googletest)
 
 # TEST UNITS - START
 
-
+add_executable(headers ${sources} headers.cpp)
+target_link_libraries(headers gtest_main)
+target_include_directories(headers
+    PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
 
 # TEST UNITS - END
 
 include(GoogleTest)
-gtest_discover_tests()
+gtest_discover_tests(headers)

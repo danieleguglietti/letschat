@@ -6,10 +6,10 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED On)
 
 set(sources ${sources} 
-    src/request.c
-    src/response.c
-    src/hashtable.c
-    src/headers.c
+    ${CMAKE_SOURCE_DIR}/src/request.c
+    ${CMAKE_SOURCE_DIR}/src/response.c
+    ${CMAKE_SOURCE_DIR}/src/hashtable.c
+    ${CMAKE_SOURCE_DIR}/src/headers.c
 )
 
 add_library(letschat STATIC ${sources})
