@@ -57,6 +57,13 @@ typedef struct request
  */
 request_t* request_parse(const char* raw_request);
 
+/**
+ * @brief Frees memory allocated bye the request object.
+ * 
+ * @param request The object to free
+ */
+void request_free(request_t* request);
+
 #ifdef __cplusplus
 }
 #endif
