@@ -13,6 +13,8 @@
 #   define MESSAGE_MAXLEN   1024    // ? 1024 chars = 1  MB (8192 bits)
 #endif
 
+#include "headers.h"
+
 typedef enum command
 {
     CONNECT,
@@ -26,6 +28,7 @@ typedef struct request
 {
     // * PUBLICS
     command_t command;
+    headers_t headers;
     char* username;
     char* channel;
     char* message;
