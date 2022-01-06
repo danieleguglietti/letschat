@@ -4,7 +4,7 @@
 #include <ctype.h>
 
 #define IS_LONGER(x) (strlen(x) > HEADER_FIELD_MAXLEN)
-#define NOT_NULL(x) (x != NULL)
+#define IS_NULL(x) (x == NULL)
 
 
 static char* strtrm(char* str) 
@@ -34,7 +34,7 @@ headers_t headers_parse(const char* raw_headers)
         char* key = strtrm(strtok(header, ":"));
         char* value = strtrm(strtok(NULL, ";"));
 
-        if (NOT_NULL(key) || NOT_NULL(value) || IS_LONGER(key) || IS_LONGER(value))
+        if (IS_NULL(key) || IS_NULL(value) || IS_LONGER(key) || IS_LONGER(value))
         {
             hashtable_free(headers);
             free(value);
