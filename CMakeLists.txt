@@ -5,12 +5,14 @@ project(letschat)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED On)
 
-add_library(letschat STATIC
+set(sources ${sources} 
     src/request.c
     src/response.c
     src/hashtable.c
     src/headers.c
 )
+
+add_library(letschat STATIC ${sources})
 
 target_include_directories(letschat
     PRIVATE
