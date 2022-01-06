@@ -47,6 +47,11 @@ static entry_t* entry_new(const char* key, char* value)
 {
     entry_t* entry = malloc(sizeof *entry);
 
+    if (entry == NULL)
+    {
+        return NULL;
+    }
+
     entry->key = key;
     entry->value = value;
 
@@ -75,8 +80,14 @@ static void set_entry(entry_t** entries, hashtable_t* table, const char* key, ch
         }
     }
 
-    free(entries[index]);
-    entries[index] = entry_new(key, value);
+    entry_t* entry = entry_new(key, value);
+
+    if (entry == NULL)
+    {
+        return;
+    }
+
+    entries[index] = entry;
 
     table->size++;
 }
@@ -117,10 +128,21 @@ hashtable_t* hashtable_new()
 {
     hashtable_t* table = malloc(sizeof *table);
 
+    if (table == NULL)
+    {
+        return NULL;
+    }
+
     table->size = 0;
     table->__capacity = HASHTABLE_STARTLEN;
 
     table->__entries = calloc(table->__capacity, sizeof *table->__entries);
+
+    if (table->__entries == NULL)
+    {
+        free(table);
+        return NULL;
+    }
 
     table->get = get;
     table->set = set;
