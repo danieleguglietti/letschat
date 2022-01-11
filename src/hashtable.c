@@ -124,6 +124,44 @@ static bool set(hashtable_t* table, const char* key, char* value)
     return true;
 }
 
+static bool has_next(hashtable_it* iterator)
+{
+    hashtable_t* table = iterator->__table;
+
+    while (iterator->__index < table->__capacity)
+    {
+        entry_t* entry = table->__entries[iterator->__index];
+
+        if (entry != NULL)
+        {
+            iterator->current = entry;
+            return true;
+        }
+
+        iterator->__index++;
+    }
+
+    return false;
+}
+
+static hashtable_it* new_iterator(hashtable_t* table)
+{
+    hashtable_it* it = malloc(sizeof *it);
+
+    if (it == NULL)
+    {
+        return NULL;
+    }
+
+    it->table = table;
+    it->index = 0;
+    it->current = NULL;
+
+    it->next = has_next;
+
+    return it;
+}
+
 hashtable_t* hashtable_new()
 {
     hashtable_t* table = malloc(sizeof *table);
@@ -146,6 +184,7 @@ hashtable_t* hashtable_new()
 
     table->get = get;
     table->set = set;
+    table->iterator = new_iterator;
 
     return table;
 }
