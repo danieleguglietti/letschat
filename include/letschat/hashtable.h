@@ -21,6 +21,8 @@ typedef struct entry
     char* value;
 } entry_t;
 
+struct hashtable_iterator;
+
 typedef struct hashtable
 {
     // * PUBLIC
@@ -60,7 +62,7 @@ typedef struct hashtable
      * @param table The table to iterate over.
      * @return hashtable_it* The new iterator.
      */
-    hashtable_it* (*iterator)(struct hashtable* table);
+    struct hashtable_iterator* (*iterator)(struct hashtable* table);
 } hashtable_t;
 
 typedef struct hashtable_iterator {
