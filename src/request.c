@@ -5,12 +5,71 @@
 #define IS_LONGER(x, MAX) (strlen(x) > MAX)
 #define IS_NULL(x) (x == NULL)
 
-static char* serialize(const request_t* request)
+#define HEADER_STRING_LEN (HEADER_FIELD_MAXLEN * 2 + 2) * HEADERS_MAXCOUNT
+#define REQUEST_STRING_MAXLEN (\
+    (COMMAND_MAXLEN + 1) +\
+    (USERNAME_MAXLEN + 1) +\
+    (CHANNEL_MAXLEN + 1) +\
+    (HEADER_STRING_LEN + 2) +\
+    (MESSAGE_MAXLEN + 1)\
+)
+
+static char* command_serialize(const command_t command)
 {
-    return NULL;
+    switch (command)
+    {
+    case CONNECT:
+        return "CONNECT";
+    case DISCONNECT:
+        return "DISCONNECT";
+    case SEND:
+        return "SEND";
+    case BROADCAST:
+        return "BROADCAST";
+    default:
+        return NULL;
+    }
 }
 
-static command_t command_parse(char* raw_command)
+static char* serialize(const request_t* request)
+{
+    char* request_str = calloc(REQUEST_STRING_MAXLEN, sizeof *request_str);
+    if (IS_NULL(request_str))
+    {
+        return NULL;
+    }
+
+    strcat(request_str, command_serialize(request->command));
+    strcat(request_str, " ");
+
+    strcat(request_str, request->username);
+    strcat(request_str, "@");
+    strcat(request_str, request->channel);
+    strcat(request_str, " [");
+
+    char* headers_str = headers_serialize(request->headers);
+    if (IS_NULL(headers_str))
+    {
+        free(request_str);
+        return NULL;
+    }
+
+    strcat(request_str, headers_str);
+    strcat(request_str, "] ");
+
+    strcat(request_str, request->message);
+
+    char* new_request = realloc(request_str, strlen(request_str) + 1);
+    if (IS_NULL(new_request))
+    {
+        free(request_str);
+        return NULL;
+    }
+
+    return new_request;
+}
+
+static command_t command_parse(const char* raw_command)
 {
     if (strcasecmp(raw_command, "CONNECT") == 0)
     {
