@@ -11,7 +11,9 @@
 #   define COMMAND_MAXLEN   32      // ? 32   chars = 32  B (256  bits)
 #   define USERNAME_MAXLEN  16      // ? 16   chars = 16  B (128  bits)
 #   define CHANNEL_MAXLEN   32      // ? 32   chars = 32  B (256  bits)
-#   define MESSAGE_MAXLEN   1024    // ? 1024 chars = 1  MB (8192 bits)
+#   ifndef MESSAGE_MAXLEN
+#      define MESSAGE_MAXLEN   1024    // ? 1024 chars = 1  MB (8192 bits)
+#   endif
 #endif
 
 #include "headers.h"
