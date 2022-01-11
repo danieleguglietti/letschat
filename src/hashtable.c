@@ -130,15 +130,13 @@ static bool has_next(hashtable_it* iterator)
 
     while (iterator->__index < table->__capacity)
     {
-        entry_t* entry = table->__entries[iterator->__index];
+        entry_t* entry = table->__entries[iterator->__index++];
 
         if (entry != NULL)
         {
             iterator->current = entry;
             return true;
         }
-
-        iterator->__index++;
     }
 
     return false;
