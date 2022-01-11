@@ -12,6 +12,7 @@ TEST(Request, Parser) {
     EXPECT_STREQ(req->username, "daniele");
     EXPECT_STREQ(req->channel, "general");
     EXPECT_STREQ(req->message, "Hi!");
+    EXPECT_EQ(req->command, SEND);
 
     headers_t headers = req->headers;
     EXPECT_STREQ(headers->get(headers, "created_at")->value, "123123123");
