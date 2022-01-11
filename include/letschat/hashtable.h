@@ -24,10 +24,19 @@ typedef struct entry
 typedef struct hashtable
 {
     // * PUBLIC
+    /**
+     * @brief The number of entries in the hashtable.
+     */
     uint32_t size;
 
     // * PRIVATES
+    /**
+     * @brief The entries array.
+     */
     entry_t** private(entries);
+    /**
+     * @brief The number of buckets in the hashtable.
+     */
     uint32_t private(capacity);
 
     // * METHODS
@@ -46,8 +55,39 @@ typedef struct hashtable
      * @return true if the entry has been set/updated.
      */
     bool (*set)(struct hashtable* table, const char* key, char* value);
+    /**
+     * @brief Creates a new iterator for the table.
+     * @param table The table to iterate over.
+     * @return hashtable_it* The new iterator.
+     */
+    hashtable_it* (*iterator)(struct hashtable* table);
 } hashtable_t;
 
+typedef struct hashtable_iterator {
+    // * PUBLIC
+    /**
+     * @brief The current entry.
+     */
+    entry_t* current;
+
+    // * PRIVATES
+    /**
+     * @brief The table to iterate.
+     */
+    hashtable_t* private(table);
+    /**
+     * @brief The current index.
+     */
+    uint32_t private(index);
+
+    // * METHODS
+    /**
+     * @brief Move the iterator to the next entry
+     * @param iterator The iterator to move.
+     * @return true if the iterator has been moved.
+     */
+    bool (*next)(struct hashtable_iterator* iterator);
+} hashtable_it;
 
 /**
  * @brief Create a new hashtable object.

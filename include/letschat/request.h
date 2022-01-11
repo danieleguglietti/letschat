@@ -22,10 +22,15 @@ extern "C" {
 typedef enum command
 {
     CONNECT,
+#define CONNECT CONNECT
     DISCONNECT,
+#define DISCONNECT DISCONNECT
     SEND,
+#define SEND SEND
     BROADCAST,
-    UNKOWN = -1
+#define BROADCAST BROADCAST
+    UNKNOWN = -1
+#define UNKNOWN UNKNOWN
 } command_t;
 
 typedef struct request
