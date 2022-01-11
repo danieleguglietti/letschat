@@ -153,8 +153,8 @@ static hashtable_it* new_iterator(hashtable_t* table)
         return NULL;
     }
 
-    it->table = table;
-    it->index = 0;
+    it->__table = table;
+    it->__index = 0;
     it->current = NULL;
 
     it->next = has_next;
