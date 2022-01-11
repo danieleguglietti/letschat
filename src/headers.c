@@ -21,7 +21,7 @@ static char* strtrm(char* str)
 headers_t headers_parse(const char* raw_headers)
 {
     headers_t headers = hashtable_new();
-    if (headers == NULL)
+    if (IS_NULL(headers))
     {
         return NULL;
     }
@@ -63,7 +63,7 @@ headers_t headers_parse(const char* raw_headers)
 char* headers_serialize(headers_t headers)
 {
     char* headers_str = calloc(HEADER_STRING_LEN, sizeof *headers_str);
-    if (headers_str == NULL)
+    if (IS_NULL(headers_str))
     {
         return NULL;
     }
@@ -94,13 +94,14 @@ char* headers_serialize(headers_t headers)
         return NULL;
     }
 
-    headers_str = realloc(headers_str, strlen(headers_str) + 1);
-    if (headers_str == NULL) 
+    char* new_headers = realloc(headers_str, strlen(headers_str) + 1);
+    if (IS_NULL(new_headers)) 
     {
+        free(headers_str);
         free(it);
         return NULL;
     }
 
     free(it);
-    return headers_str;
+    return new_headers;
 }
