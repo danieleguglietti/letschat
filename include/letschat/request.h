@@ -36,10 +36,25 @@ typedef enum command
 typedef struct request
 {
     // * PUBLICS
+    /**
+     * @brief The message command.
+     */
     command_t command;
+    /**
+     * @brief The hashtable containing the message headers.
+     */
     headers_t headers;
+    /**
+     * @brief The message sender username. 
+     */
     char* username;
+    /**
+     * @brief The message channel.
+     */
     char* channel;
+    /**
+     * @brief The message body.
+     */
     char* message;
 
     // * PRIVATES

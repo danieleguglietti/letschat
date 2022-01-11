@@ -10,6 +10,30 @@ static char* serialize(const request_t* request)
     return NULL;
 }
 
+static command_t command_parse(char* raw_command)
+{
+    if (strcasecmp(raw_command, "CONNECT") == 0)
+    {
+        return CONNECT;
+    }
+    else if (strcasecmp(raw_command, "DISCONNECT") == 0)
+    {
+        return DISCONNECT;
+    }
+    else if (strcasecmp(raw_command, "SEND") == 0)
+    {
+        return SEND;
+    }
+    else if (strcasecmp(raw_command, "BROADCAST") == 0)
+    {
+        return BROADCAST;
+    }
+    else
+    {
+        return UNKNOWN;
+    }
+}
+
 request_t* request_parse(const char* raw_request)
 {
     request_t* request = malloc(sizeof *request);
@@ -69,9 +93,9 @@ request_t* request_parse(const char* raw_request)
         return NULL;
     }
 
+    request->command = command_parse(command);
     request->username = username;
     request->channel = channel;
-    request->message = message;
     request->message = message;
 
     return request;
@@ -79,9 +103,30 @@ request_t* request_parse(const char* raw_request)
 
 void request_free(request_t* request)
 {
-    hashtable_free(request->headers);
-    free(request->username);
-    free(request->channel);
-    free(request->message);
+    if (request == NULL)
+    {
+        return;
+    }
+
+    if (request->headers != NULL)
+    {
+        hashtable_free(request->headers);
+    }
+
+    if (request->username != NULL)
+    {
+        free(request->username);
+    }
+
+    if (request->channel != NULL)
+    {
+        free(request->channel);
+    }
+
+    if (request->message != NULL)
+    {
+        free(request->message);
+    }
+
     free(request);
 }
