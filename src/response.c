@@ -4,6 +4,7 @@
 
 #define IS_LONGER(x, MAX) (strlen(x) > MAX)
 #define IS_NULL(x) (x == NULL)
+#define NOT_NULL(x) (x != NULL)
 
 #define HEADER_STRING_LEN (HEADER_FIELD_MAXLEN * 2 + 2) * HEADERS_MAXCOUNT
 #define RESPONSE_STRING_MAXLEN (\
@@ -156,12 +157,12 @@ void response_free(response_t* response)
         return;
     }
 
-    if (!IS_NULL(response->headers))
+    if (NOT_NULL(response->headers))
     {
         hashtable_free(response->headers);
     }
 
-    if (!IS_NULL(response->message))
+    if (NOT_NULL(response->message))
     {
         free(response->message);
     }
