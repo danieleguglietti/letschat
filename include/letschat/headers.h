@@ -1,11 +1,9 @@
 #ifndef __HEADERS__
 #define __HEADERS__
 
-#include "hashtable.h"
+#include "utils/hashtable.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+__BEGIN_DECLS
 
 typedef hashtable_t* headers_t;
 typedef entry_t* header_t;
@@ -29,8 +27,6 @@ headers_t headers_parse(const char* raw_headers);
  */
 char* headers_serialize(headers_t headers);
 
-#ifdef __cplusplus
-}
-#endif
+__END_DECLS
 
 #endif // __HEADERS__

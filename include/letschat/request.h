@@ -18,9 +18,7 @@
 
 #include "headers.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+__BEGIN_DECLS
 
 typedef enum command
 {
@@ -87,8 +85,6 @@ request_t* request_parse(const char* raw_request);
  */
 void request_free(request_t* request);
 
-#ifdef __cplusplus
-}
-#endif
+__END_DECLS
 
 #endif // __REQUEST__

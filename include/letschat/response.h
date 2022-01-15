@@ -16,9 +16,7 @@
 
 #include "headers.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+__BEGIN_DECLS
 
 typedef enum code
 {
@@ -83,8 +81,6 @@ response_t* response_parse(const char* raw_response);
  */
 void response_free(response_t* response);
 
-#ifdef __cplusplus
-}
-#endif
+__END_DECLS
 
 #endif // __RESPONSE__
