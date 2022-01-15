@@ -1,4 +1,4 @@
-#include "letschat/hashtable.h"
+#include "letschat/utils/hashtable.h"
 #include <stdlib.h>
 #include <string.h>
 
