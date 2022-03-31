@@ -23,6 +23,15 @@ uint64_t strsize(const string_t str);
  */
 void strapp(string_t str, const char ch);
 
+/**
+ * @brief Joins two string into one.
+ * 
+ * @param str1 The first string.
+ * @param str2 The second string.
+ * @return string_t The joined string.
+ */
+string_t strjoin(const string_t str1, const string_t str2);
+
 __END_DECLS
 
 

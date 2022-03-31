@@ -15,3 +15,11 @@ TEST(String, AppendChar) {
     strapp(str2, '?');
     EXPECT_STREQ(str2, "Hello World!?");
 } 
+
+TEST(String, Join) {
+    string_t str1 = "Hello ";
+    string_t str2 = "World!";
+
+    string_t str3 = strjoin(str1, str2);
+    EXPECT_STREQ(str3, "Hello World!");
+}
