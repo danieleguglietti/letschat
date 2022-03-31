@@ -54,10 +54,10 @@ typedef struct response
      */
     char* message;
 
-    // * PRIVATES
+    // ! PRIVATES
     const char* private(raw);
 
-    // * METHODS
+    // ? METHODS
     /**
      * @brief Serialize a response object into a string.
      * @param response The object to serilized.

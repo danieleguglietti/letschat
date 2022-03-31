@@ -31,7 +31,7 @@ typedef struct hashtable
      */
     uint32_t size;
 
-    // * PRIVATES
+    // ! PRIVATES
     /**
      * @brief The entries array.
      */
@@ -41,7 +41,7 @@ typedef struct hashtable
      */
     uint32_t private(capacity);
 
-    // * METHODS
+    // ? METHODS
     /**
      * @brief Finds the entry with the given key in the hashtable.
      * @param table The table where to search in.
@@ -72,7 +72,7 @@ typedef struct hashtable_iterator {
      */
     entry_t* current;
 
-    // * PRIVATES
+    // ! PRIVATES
     /**
      * @brief The table to iterate.
      */
@@ -82,7 +82,7 @@ typedef struct hashtable_iterator {
      */
     uint32_t private(index);
 
-    // * METHODS
+    // ? METHODS
     /**
      * @brief Move the iterator to the next entry
      * @param iterator The iterator to move.

@@ -34,6 +34,16 @@ target_include_directories(request
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
+add_executable(string ${sources} string.cpp)
+target_link_libraries(string gtest_main)
+target_include_directories(string
+    PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
+
 # TEST UNITS - END
 
 include(GoogleTest)

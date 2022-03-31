@@ -58,10 +58,10 @@ typedef struct request
      */
     char* message;
 
-    // * PRIVATES
+    // ! PRIVATES
     const char* private(raw);
 
-    // * METHODS
+    // ? METHODS
     /**
      * @brief Serialize a request object into a string.
      * @param request The object to serilized.

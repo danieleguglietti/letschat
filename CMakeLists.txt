@@ -10,6 +10,7 @@ set(sources ${sources}
     ${CMAKE_SOURCE_DIR}/src/response.c
     ${CMAKE_SOURCE_DIR}/src/hashtable.c
     ${CMAKE_SOURCE_DIR}/src/headers.c
+    ${CMAKE_SOURCE_DIR}/src/string.c
 )
 
 add_library(letschat STATIC ${sources})
@@ -22,4 +23,4 @@ target_include_directories(letschat
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
-# add_subdirectory(test)
+add_subdirectory(test)
