@@ -22,4 +22,4 @@ target_include_directories(letschat
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
-add_subdirectory(test)
+# add_subdirectory(test)
