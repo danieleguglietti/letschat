@@ -1,25 +1,40 @@
 #include "letschat/utils/string.h"
+#include <string>
+#include <stdlib.h>
 #include <string.h>
 #include <gtest/gtest.h>
 
-string_t str = "Hello World!";
-
 TEST(String, Size) {
+    const string_t str = const_cast<string_t>("Hello World!");
     uint64_t size = strsize(str);
+
     EXPECT_EQ(size, 12);
 }
 
-TEST(String, AppendChar) {
-    string_t str2 = strdup(str);
+TEST(String, Find) {
+    string_t src = const_cast<string_t>("Hello");
+    size_t pos = strfind(src, 'o');
 
-    strapp(str2, '?');
-    EXPECT_STREQ(str2, "Hello World!?");
+    EXPECT_NE(pos, -1);
+    EXPECT_EQ(pos, 4);
+
+    pos = strfind(src, 'a');
+    EXPECT_EQ(pos, -1);
 } 
 
-TEST(String, Join) {
-    string_t str1 = "Hello ";
-    string_t str2 = "World!";
+TEST(String, Copy) {
+    string_t src = const_cast<string_t>("Hello");
+    string_t dest = (string_t) malloc(strsize(src) + 1);
 
-    string_t str3 = strjoin(str1, str2);
-    EXPECT_STREQ(str3, "Hello World!");
+    strcopy(src, dest);
+    EXPECT_STREQ(src, dest);
+}
+
+TEST(String, Append) {
+    string_t src = const_cast<string_t>("Hello");
+    string_t str = const_cast<string_t>("World");
+
+    string_t res = strapp(&src, str);
+    EXPECT_STREQ(res, "HelloWorld");
+    EXPECT_STREQ(src, "HelloWorld");
 }

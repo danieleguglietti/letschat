@@ -2,6 +2,8 @@
 
 #include <stdlib.h>
 
+#define IS_NULL(x) (x == NULL)
+
 uint64_t strsize(const string_t str)
 {
     uint64_t size = 0;
@@ -9,26 +11,43 @@ uint64_t strsize(const string_t str)
     return size;
 }
 
-void strapp(string_t str, const char ch)
+string_t strapp(string_t* source, const string_t str)
 {
-    uint64_t size = strsize(str);
-    str = realloc(str, size + 2);
-    str[size] = ch;
+    uint64_t size = strsize(*source) + strsize(str) + 1;
+    string_t new = malloc(sizeof(*new) * size);
+
+    if (IS_NULL(new))
+    {
+        return NULL;
+    }
+
+    strcopy(*source, new);
+    strcopy(str, new + strsize(new));
+
+    *source = new;
+
+    return new;
 }
 
-string_t strjoin(const string_t str1, const string_t str2)
+int64_t strfind(const string_t str, const char ch)
 {
-    uint64_t size1 = strsize(str1);
-    uint64_t size2 = strsize(str2);
+    uint64_t i = 0;
+    for(string_t chr = str; *chr != '\0'; chr++)
+    {
+        if (*chr == ch)
+            return i;
+        i++;
+    }
 
-    string_t str = malloc(size1 + size2 + 1);
-    str[size1 + size2] = '\0';
+    return -1;
+}
 
-    for(uint64_t i = 0; i < size1; i++)
-        str[i] = str1[i];
+void strcopy(const string_t src, string_t dest)
+{
+    for(const char* ch = src; *ch != '\0'; ch++, dest++)
+    {
+        *dest = *ch;
+    }
 
-    for(uint64_t i = 0; i < size2; i++)
-        str[size1 + i] = str2[i];
-
-    return str;
+    *dest++ = '\0';
 }

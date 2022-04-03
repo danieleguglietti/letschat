@@ -16,21 +16,31 @@ typedef char* string_t;
 uint64_t strsize(const string_t str);
 
 /**
- * @brief Append a character to the string.
+ * @brief Append a string to the source.
  * 
- * @param str The string to append the character to.
- * @param ch The character to append.
+ * @param source Pointer to the string to append in.
+ * @param str The string to append.
+ * @return string_t The new string.
  */
-void strapp(string_t str, const char ch);
+string_t strapp(string_t* source, const string_t str);
 
 /**
- * @brief Joins two string into one.
+ * @brief Finds the first occurrence of a character in a string.
  * 
- * @param str1 The first string.
- * @param str2 The second string.
- * @return string_t The joined string.
+ * @param str The string to search in.
+ * @param ch The character to search for.
+ * @return int64_t The index of the character in the string.
  */
-string_t strjoin(const string_t str1, const string_t str2);
+int64_t strfind(const string_t str, const char ch);
+
+/**
+ * @brief Copy a string into another.
+ *  The destination string must be large enough to hold the source string.
+ * 
+ * @param src The string to copy.
+ * @param dest The destination string.
+ */
+void strcopy(const string_t src, string_t dest);
 
 __END_DECLS
 
