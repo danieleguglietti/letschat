@@ -51,3 +51,43 @@ void strcopy(const string_t src, string_t dest)
 
     *dest++ = '\0';
 }
+
+void strncopy(const string_t src, string_t dest, const uint64_t size)
+{
+    uint64_t i = 0;
+
+    for(const char* ch = src; *ch != '\0' && i < size; ch++, dest++, i++)
+    {
+        *dest = *ch;
+    }
+
+    *dest++ = '\0';
+}
+
+string_t substr(const string_t str, const uint64_t start)
+{
+    uint64_t size = strsize(str + start) + 1;
+    string_t sub = (string_t) malloc(sizeof(*sub) * size);
+
+    if (IS_NULL(sub))
+    {
+        return NULL;
+    }
+
+    strcopy(str + start, sub);
+
+    return sub;
+}
+
+string_t subnstr(const string_t str, const uint64_t start, const uint64_t size)
+{
+    string_t sub = (string_t) malloc(sizeof(*sub) * (size + 1));
+    if (IS_NULL(sub))
+    {
+        return NULL;
+    }
+
+    strncopy(str + start, sub, size);
+
+    return sub;
+}

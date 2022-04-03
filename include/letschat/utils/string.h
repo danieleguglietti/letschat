@@ -42,6 +42,35 @@ int64_t strfind(const string_t str, const char ch);
  */
 void strcopy(const string_t src, string_t dest);
 
+/**
+ * @brief Copy a givven number of character from a string into another.
+ *  The destination string must be large enough to hold the source string.
+ * 
+ * @param src The string to copy.
+ * @param dest The destination string.
+ * @param size The amounte of characters to copy.
+ */
+void strncopy(const string_t src, string_t dest, const uint64_t size);
+
+/**
+ * @brief Get the substring from a string.
+ * 
+ * @param str The string to get the substring from.
+ * @param start The index to start the substring from.
+ * @return string_t The substring.
+ */
+string_t substr(const string_t str, const uint64_t start);
+
+/**
+ * @brief Get the substring of a givven number of charaters from a string.
+ * 
+ * @param str The string to get the substring from.
+ * @param start The index to start the substring from.
+ * @param size The number of characters to get.
+ * @return string_t The substring.
+ */
+string_t subnstr(const string_t str, const uint64_t start, const uint64_t size);
+
 __END_DECLS
 
 

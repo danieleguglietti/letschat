@@ -28,6 +28,18 @@ TEST(String, Copy) {
 
     strcopy(src, dest);
     EXPECT_STREQ(src, dest);
+
+    free(dest);
+}
+
+TEST(String, NCopy) {
+    string_t src = const_cast<string_t>("Hello");
+    string_t dest = (string_t) malloc(strsize(src) - 1);
+
+    strncopy(src, dest, 4);
+    EXPECT_STREQ(dest, "Hell");
+
+    free(dest);
 }
 
 TEST(String, Append) {
@@ -37,4 +49,25 @@ TEST(String, Append) {
     string_t res = strapp(&src, str);
     EXPECT_STREQ(res, "HelloWorld");
     EXPECT_STREQ(src, "HelloWorld");
+
+    free(res);
 }
+
+TEST(String, Substring) {
+    string_t src = const_cast<string_t>("Hello World!");
+    string_t str = substr(src, 6);
+
+    EXPECT_STREQ(str, "World!");
+
+    free(str);
+}
+
+TEST(String, SubNString) {
+    string_t src = const_cast<string_t>("Hello World!");
+    string_t str = subnstr(src, 6, 5);
+
+    EXPECT_STREQ(str, "World");
+
+    free(str);
+}
+
