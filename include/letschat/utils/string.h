@@ -107,6 +107,24 @@ bool streq(const string_t str1, const string_t srt2);
  */
 bool streq_nocase(const string_t str1, const string_t srt2);
 
+/**
+ * @brief Create a string of givven size filled with the givven character.
+ * 
+ * @param size The size of the new string.
+ * @param ch The character to fill the string with.
+ * @return string_t The new string.
+ */
+string_t strinit(const uint64_t size, const char ch);
+
+/**
+ * @brief Fill a string with the given character for a givven amount of character.
+ * 
+ * @param str The string to fill.
+ * @param ch The character to fill the string with.
+ * @param size The number of characters to fill.
+ */
+void strfill(string_t str, const char ch, uint64_t size);
+
 __END_DECLS
 
 

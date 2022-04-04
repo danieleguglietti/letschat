@@ -15,16 +15,14 @@ uint64_t strsize(const string_t str)
 string_t strapp(string_t* source, const string_t str)
 {
     uint64_t size = strsize(*source) + strsize(str) + 1;
-    string_t new = malloc(sizeof(*new) * size);
+    string_t new = (string_t) realloc(*source, sizeof(*new) * size);
 
     if (IS_NULL(new))
     {
         return NULL;
     }
 
-    strcopy(*source, new);
     strcopy(str, new + strsize(new));
-
     *source = new;
 
     return new;
@@ -67,8 +65,7 @@ void strncopy(const string_t src, string_t dest, const uint64_t size)
 
 string_t substr(const string_t str, const uint64_t start)
 {
-    uint64_t size = strsize(str + start) + 1;
-    string_t sub = (string_t) malloc(sizeof(*sub) * size);
+    string_t sub = strinit(strsize(str + start), 0);
 
     if (IS_NULL(sub))
     {
@@ -82,7 +79,7 @@ string_t substr(const string_t str, const uint64_t start)
 
 string_t subnstr(const string_t str, const uint64_t start, const uint64_t size)
 {
-    string_t sub = (string_t) malloc(sizeof(*sub) * (size + 1));
+    string_t sub = strinit(size, 0);
     if (IS_NULL(sub))
     {
         return NULL;
@@ -120,8 +117,7 @@ string_t strsplit(string_t str, const char delim)
 
 string_t dupstr(const string_t str)
 {
-    uint64_t size = strsize(str) + 1;
-    string_t new = malloc(sizeof(*new) * size);
+    string_t new = strinit(strsize(str), 0);
     if (IS_NULL(new))
     {
         return NULL;
@@ -155,4 +151,26 @@ bool streq_nocase(const string_t str1, const string_t str2)
     }
 
     return true;
+}
+
+string_t strinit(uint64_t size, const char ch)
+{
+    string_t str = (string_t) malloc(sizeof(*str) * (size + 1));
+    if (IS_NULL(str))
+    {
+        return NULL;
+    }
+
+    strfill(str, ch, size);
+    str[size] = '\0';
+
+    return str;
+}
+
+void strfill(string_t str, const char ch, uint64_t size)
+{
+    while(size--)
+    {
+        *str++ = ch;
+    }
 }

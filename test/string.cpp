@@ -110,3 +110,21 @@ TEST(String, EqualsNoCase) {
         streq_nocase(const_cast<string_t>("Hello"), const_cast<string_t>("HeLlo"))
     );
 }
+
+TEST(String, Fill) {
+    string_t str = static_cast<string_t>(malloc(5));
+    strfill(str, '*', 5);
+
+    str[4] = '\0';
+
+    EXPECT_STREQ(str, "****");
+
+    free(str);
+}
+
+TEST(String, Init) {
+    string_t str = strinit(5, '*');
+    EXPECT_STREQ(str, "*****");
+
+    free(str);
+}
