@@ -125,6 +125,14 @@ string_t strinit(const uint64_t size, const char ch);
  */
 void strfill(string_t str, const char ch, uint64_t size);
 
+/**
+ * @brief Trim the ends of the string.
+ * 
+ * @param str The string to trim.
+ * @return string_t The trimmed string.
+ */
+string_t strtrim(string_t str);
+
 __END_DECLS
 
 

@@ -174,3 +174,13 @@ void strfill(string_t str, const char ch, uint64_t size)
         *str++ = ch;
     }
 }
+
+string_t strtrim(const string_t str)
+{
+    uint64_t start = 0, len = strsize(str);
+
+    while(isspace(str[len - 1])) len--;
+    while(isspace(str[start])) start++, len--;
+
+    return subnstr(str, start, len);
+}

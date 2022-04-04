@@ -43,7 +43,7 @@ TEST(String, NCopy) {
 }
 
 TEST(String, Append) {
-    string_t src = const_cast<string_t>("Hello");
+    string_t src = dupstr(const_cast<string_t>("Hello"));
     string_t str = const_cast<string_t>("World");
 
     string_t res = strapp(&src, str);
@@ -127,4 +127,9 @@ TEST(String, Init) {
     EXPECT_STREQ(str, "*****");
 
     free(str);
+}
+
+TEST(String, Trim) {
+    string_t trm = strtrim("  Hello World!  ");
+    EXPECT_STREQ(trm, "Hello World!");
 }
