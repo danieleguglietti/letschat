@@ -71,6 +71,23 @@ string_t substr(const string_t str, const uint64_t start);
  */
 string_t subnstr(const string_t str, const uint64_t start, const uint64_t size);
 
+/**
+ * @brief Duplicate a string.
+ * 
+ * @param str The string to duplicate.
+ * @return string_t The new string.
+ */
+string_t dupstr(const string_t str);
+
+/**
+ * @brief Splits a string when finds the first occurency of the delimeter character.
+ * 
+ * @param str The string to split.
+ * @param delim The delimeter character.
+ * @return string_t The result.
+ */
+string_t strsplit(string_t str, const char delim);
+
 __END_DECLS
 
 

@@ -91,3 +91,41 @@ string_t subnstr(const string_t str, const uint64_t start, const uint64_t size)
 
     return sub;
 }
+
+string_t strsplit(string_t str, const char delim)
+{
+    if (*str == '\0')
+    {
+        return NULL;
+    }
+
+    int64_t index = strfind(str, delim);
+    if (index == -1)
+    {
+        return NULL;
+    }
+
+    string_t end = str + index;
+    if (*end == '\0')
+    {
+        return str;
+    }
+
+    *end = '\0';
+    string_t tok = end + 1; 
+
+    return tok;
+}
+
+string_t dupstr(const string_t str)
+{
+    uint64_t size = strsize(str) + 1;
+    string_t new = malloc(sizeof(*new) * size);
+    if (IS_NULL(new))
+    {
+        return NULL;
+    }
+
+    strcopy(str, new);
+    return new;
+}

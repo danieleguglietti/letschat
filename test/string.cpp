@@ -71,3 +71,18 @@ TEST(String, SubNString) {
     free(str);
 }
 
+TEST(String, Duplicate) {
+    string_t src = const_cast<string_t>("Hello World!");
+    string_t dup = dupstr(src);
+
+    EXPECT_NE(src, dup);
+    EXPECT_STREQ(src, dup);
+}
+
+TEST(String, Split) {
+    string_t src = dupstr(const_cast<string_t>("Hello World!"));
+    string_t tok = strsplit(src, ' ');
+
+    EXPECT_STREQ(src, "Hello");
+    EXPECT_STREQ(tok, "World!");
+}
