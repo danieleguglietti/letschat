@@ -2,6 +2,7 @@
 #define __STRING__
 
 #include <stdint.h>
+#include <stdbool.h>
 
 __BEGIN_DECLS
 
@@ -87,6 +88,24 @@ string_t dupstr(const string_t str);
  * @return string_t The result.
  */
 string_t strsplit(string_t str, const char delim);
+
+/**
+ * @brief Check whether two strings are the same.
+ * 
+ * @param str1 One of the two strings.
+ * @param srt2 One of the two strings.
+ * @return true If the strings are equals.
+ */
+bool streq(const string_t str1, const string_t srt2);
+
+/**
+ * @brief Check whether two strings are the same ignoring case.
+ * 
+ * @param str1 One of the two strings.
+ * @param srt2 One of the two strings.
+ * @return true If the strings are equals.
+ */
+bool streq_nocase(const string_t str1, const string_t srt2);
 
 __END_DECLS
 

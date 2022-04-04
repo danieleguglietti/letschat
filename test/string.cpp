@@ -77,6 +77,8 @@ TEST(String, Duplicate) {
 
     EXPECT_NE(src, dup);
     EXPECT_STREQ(src, dup);
+
+    free(dup);
 }
 
 TEST(String, Split) {
@@ -85,4 +87,26 @@ TEST(String, Split) {
 
     EXPECT_STREQ(src, "Hello");
     EXPECT_STREQ(tok, "World!");
+
+    free(src);
+}
+
+TEST(String, Equals) {
+    EXPECT_TRUE(
+        streq(const_cast<string_t>("Hello"), const_cast<string_t>("Hello"))
+    );
+    
+    EXPECT_FALSE(
+        streq(const_cast<string_t>("Hello"), const_cast<string_t>("HeLlo"))
+    );
+}
+
+TEST(String, EqualsNoCase) {
+    EXPECT_TRUE(
+        streq_nocase(const_cast<string_t>("Hello"), const_cast<string_t>("Hello"))
+    );
+    
+    EXPECT_TRUE(
+        streq_nocase(const_cast<string_t>("Hello"), const_cast<string_t>("HeLlo"))
+    );
 }

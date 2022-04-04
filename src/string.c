@@ -1,6 +1,7 @@
 #include "letschat/utils/string.h"
 
 #include <stdlib.h>
+#include <ctype.h>
 
 #define IS_NULL(x) (x == NULL)
 
@@ -128,4 +129,30 @@ string_t dupstr(const string_t str)
 
     strcopy(str, new);
     return new;
+}
+
+bool streq(const string_t str1, const string_t str2)
+{
+    for(char *ch1 = str1, *ch2 = str2; *ch1 != '\0' && *ch2 != '\0'; ch1++, ch2++)
+    {
+        if (*ch1 != *ch2)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool streq_nocase(const string_t str1, const string_t str2)
+{
+    for(char *ch1 = str1, *ch2 = str2; *ch1 != '\0' && *ch2 != '\0'; ch1++, ch2++)
+    {
+        if (tolower(*ch1) != tolower(*ch2))
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
