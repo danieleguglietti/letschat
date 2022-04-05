@@ -3,7 +3,7 @@
 
 #ifndef __PRIVATE_MODIFIER__
 #   define __PRIVATE_MODIFIER__(x) __##x
-#   define private(x) __PRIVATE_MODIFIER__(x)
+#   define PRIVATE(x) __PRIVATE_MODIFIER__(x)
 #endif
 
 #ifndef __RESPONSE_MESSAGE_FIELDS_MAXLEN__
@@ -16,7 +16,9 @@
 
 #include "headers.h"
 
-__BEGIN_DECLS
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef enum code
 {
@@ -55,7 +57,7 @@ typedef struct response
     string_t message;
 
     // ! PRIVATES
-    string_t private(raw);
+    string_t PRIVATE(raw);
 
     // ? METHODS
     /**
@@ -81,6 +83,8 @@ response_t* response_parse(string_t raw_response);
  */
 void response_free(response_t* response);
 
-__END_DECLS
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __RESPONSE__

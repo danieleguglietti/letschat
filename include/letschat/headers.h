@@ -4,7 +4,9 @@
 #include "utils/hashtable.h"
 #include "utils/string.h"
 
-__BEGIN_DECLS
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef hashtable_t* headers_t;
 typedef entry_t* header_t;
@@ -28,6 +30,8 @@ headers_t headers_parse(const string_t raw_headers);
  */
 string_t headers_serialize(headers_t headers);
 
-__END_DECLS
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __HEADERS__

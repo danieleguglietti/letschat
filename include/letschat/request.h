@@ -3,7 +3,7 @@
 
 #ifndef __PRIVATE_MODIFIER__
 #   define __PRIVATE_MODIFIER__(x) __##x
-#   define private(x) __PRIVATE_MODIFIER__(x)
+#   define PRIVATE(x) __PRIVATE_MODIFIER__(x)
 #endif
 
 #ifndef __REQUEST_MESSAGE_FIELDS_MAXLEN__
@@ -18,7 +18,9 @@
 
 #include "headers.h"
 
-__BEGIN_DECLS
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef enum command
 {
@@ -59,7 +61,7 @@ typedef struct request
     string_t message;
 
     // ! PRIVATES
-    string_t private(raw);
+    string_t PRIVATE(raw);
 
     // ? METHODS
     /**
@@ -85,6 +87,8 @@ request_t* request_parse(string_t raw_request);
  */
 void request_free(request_t* request);
 
-__END_DECLS
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __REQUEST__

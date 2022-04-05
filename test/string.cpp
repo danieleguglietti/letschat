@@ -34,7 +34,7 @@ TEST(String, Copy) {
 
 TEST(String, NCopy) {
     string_t src = const_cast<string_t>("Hello");
-    string_t dest = (string_t) malloc(strsize(src) - 1);
+    string_t dest = strinit(5, 'a');
 
     strncopy(src, dest, 4);
     EXPECT_STREQ(dest, "Hell");

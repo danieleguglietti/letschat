@@ -4,7 +4,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-__BEGIN_DECLS
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef char* string_t;
 
@@ -133,7 +135,9 @@ void strfill(string_t str, const char ch, uint64_t size);
  */
 string_t strtrim(string_t str);
 
-__END_DECLS
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif // __STRING__

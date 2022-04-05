@@ -3,7 +3,7 @@
 
 #ifndef __PRIVATE_MODIFIER__
 #   define __PRIVATE_MODIFIER__(x) __##x
-#   define private(x) __PRIVATE_MODIFIER__(x)
+#   define PRIVATE(x) __PRIVATE_MODIFIER__(x)
 #endif
 
 #define HASHTABLE_STARTLEN 16
@@ -13,7 +13,9 @@
 
 #include "string.h"
 
-__BEGIN_DECLS
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 
 typedef struct entry
@@ -36,11 +38,11 @@ typedef struct hashtable
     /**
      * @brief The entries array.
      */
-    entry_t** private(entries);
+    entry_t** PRIVATE(entries);
     /**
      * @brief The number of buckets in the hashtable.
      */
-    uint32_t private(capacity);
+    uint32_t PRIVATE(capacity);
 
     // ? METHODS
     /**
@@ -77,11 +79,11 @@ typedef struct hashtable_iterator {
     /**
      * @brief The table to iterate.
      */
-    hashtable_t* private(table);
+    hashtable_t* PRIVATE(table);
     /**
      * @brief The current index.
      */
-    uint32_t private(index);
+    uint32_t PRIVATE(index);
 
     // ? METHODS
     /**
@@ -107,7 +109,9 @@ hashtable_t* hashtable_new();
 void hashtable_free(hashtable_t* table);
 
 
-__END_DECLS
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif // __HASHTABLE__
