@@ -83,12 +83,12 @@ TEST(String, Duplicate) {
 
 TEST(String, Split) {
     string_t src = dupstr(const_cast<string_t>("Hello World!"));
-    string_t tok = strsplit(src, ' ');
+    string_t tok = strsplit(&src, ' ');
 
-    EXPECT_STREQ(src, "Hello");
-    EXPECT_STREQ(tok, "World!");
+    EXPECT_STREQ(tok, "Hello");
+    EXPECT_STREQ(src, "World!");
 
-    free(src);
+    free(tok);
 }
 
 TEST(String, Equals) {
@@ -130,6 +130,6 @@ TEST(String, Init) {
 }
 
 TEST(String, Trim) {
-    string_t trm = strtrim("  Hello World!  ");
+    string_t trm = strtrim(const_cast<string_t>("  Hello World!  "));
     EXPECT_STREQ(trm, "Hello World!");
 }

@@ -90,27 +90,29 @@ string_t subnstr(const string_t str, const uint64_t start, const uint64_t size)
     return sub;
 }
 
-string_t strsplit(string_t str, const char delim)
+string_t strsplit(string_t* str, const char delim)
 {
     if (*str == '\0')
     {
         return NULL;
     }
 
-    int64_t index = strfind(str, delim);
+    int64_t index = strfind(*str, delim);
     if (index == -1)
     {
         return NULL;
     }
 
-    string_t end = str + index;
+    string_t end = *str + index;
     if (*end == '\0')
     {
-        return str;
+        return *str;
     }
 
+    string_t tok = *str;
+
     *end = '\0';
-    string_t tok = end + 1; 
+    *str = end + 1;
 
     return tok;
 }

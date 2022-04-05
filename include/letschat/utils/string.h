@@ -87,7 +87,7 @@ string_t dupstr(const string_t str);
  * @param delim The delimeter character.
  * @return string_t The result.
  */
-string_t strsplit(string_t str, const char delim);
+string_t strsplit(string_t* str, const char delim);
 
 /**
  * @brief Check whether two strings are the same.
