@@ -1,8 +1,8 @@
 #include "letschat/response.h"
 #include <stdlib.h>
-#include <string.h>
+#include <stdio.h>
 
-#define IS_LONGER(x, MAX) (strlen(x) > MAX)
+#define IS_LONGER(x, MAX) (strsize(x) > MAX)
 #define IS_NULL(x) (x == NULL)
 #define NOT_NULL(x) (x != NULL)
 
@@ -13,107 +13,74 @@
     (MESSAGE_MAXLEN + 1)\
 )
 
-static char* code_serialize(const code_t code)
+static string_t code_serialize(const code_t code)
 {
-    switch (code)
-    {
-    case CONNECTED:
-        return "CONNECTED";
-    case DISCONNECTED:
-        return "DISCONNECTED";
-    case FORWARDED:
-        return "FORWARDED";
-    case RECEIVING:
-        return "RECEIVING";
-    case DROPPED:
-        return "DROPPED";
-    case UNKOWN_COMMAND:
-        return "UNKOWN_COMMAND";
-    case BLOCKED:
-        return "BLOCKED";
-    default:
-        return NULL;
-    }
+    string_t strcode = strinit(4, 0);
+    sprintf(strcode, "%d", code);
+    return strcode;
 }
 
-static char* serialize(const response_t* response)
+static string_t serialize(const response_t* response)
 {
-    char* response_str = calloc(RESPONSE_STRING_MAXLEN, sizeof *response_str);
+    string_t response_str = strinit(1, 0);
     if (IS_NULL(response_str))
     {
         return NULL;
     }
 
-    strcat(response_str, code_serialize(response->code));
-    strcat(response_str, " [");
+    strapp(&response_str, code_serialize(response->code));
+    strapp(&response_str, " [");
 
-    char* headers_str = headers_serialize(response->headers);
+    string_t headers_str = headers_serialize(response->headers);
     if (IS_NULL(headers_str))
     {
         free(response_str);
         return NULL;
     }
 
-    strcat(response_str, headers_str);
-    strcat(response_str, "] ");
+    strapp(&response_str, headers_str);
+    strapp(&response_str, "] ");
 
-    strcat(response_str, response->message);
+    strapp(&response_str, response->message);
 
-    char* new_response = realloc(response_str, strlen(response_str) + 1);
-    if (IS_NULL(new_response))
-    {
-        free(response_str);
-        return NULL;
-    }
-
-    return new_response;
+    return response_str;
 }
 
-static code_t code_parse(const char* raw_code)
+static code_t code_parse(const string_t raw_code)
 {
-    if (strcasecmp(raw_code, "CONNECTED") == 0)
+    switch(atoi(raw_code))
     {
+    case CONNECTED:
         return CONNECTED;
-    }
-    else if (strcasecmp(raw_code, "DISCONNECTED") == 0)
-    {
+    case DISCONNECTED:
         return DISCONNECTED;
-    }
-    else if (strcasecmp(raw_code, "FORWARDED") == 0)
-    {
+    case FORWARDED:
         return FORWARDED;
-    }
-    else if (strcasecmp(raw_code, "RECEIVING") == 0)
-    {
+    case RECEIVING:
         return RECEIVING;
-    }
-    else if (strcasecmp(raw_code, "DROPPED") == 0)
-    {
+    case DROPPED:
         return DROPPED;
-    }
-    else if (strcasecmp(raw_code, "UNKOWN_COMMAND") == 0)
-    {
+    case UNKOWN_COMMAND:
         return UNKOWN_COMMAND;
-    }
-    else
-    {
+    default:
         return BLOCKED;
-    }
+    };
 }
 
-response_t* response_parse(const char* raw_response)
+response_t* response_parse(const string_t raw_response)
 {
     response_t* response = malloc(sizeof *response);
     response->__raw = raw_response;
     response->serialize = serialize;
 
-    char* src = strdup(raw_response);
+    string_t src = dupstr(raw_response);
+    string_t start = src;
 
-    char* code = strtok_r(src, " ", &src);
+    string_t code = strsplit(&src, ' ');
     if (IS_NULL(code))
     {
         response_free(response);
-        free(src);
+        free(start);
         return NULL;
     }
 
@@ -121,13 +88,13 @@ response_t* response_parse(const char* raw_response)
 
     if (*src != ']')
     {
-        char* raw_header = strtok_r(src, "]", &src);
+        string_t raw_header = strsplit(&src, ']');
         headers_t headers = headers_parse(raw_header);
 
         if (IS_NULL(headers))
         {
             response_free(response);
-            free(src);
+            free(start);
             return NULL;
         }
 
@@ -136,11 +103,11 @@ response_t* response_parse(const char* raw_response)
 
     src++;
 
-    char* message = strtok_r(src, "\0", &src);
+    string_t message = strsplit(&src, 0);
     if (IS_NULL(message) || IS_LONGER(message, MESSAGE_MAXLEN))
     {
         response_free(response);
-        free(src);
+        free(start);
         return NULL;
     }
 

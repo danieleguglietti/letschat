@@ -52,10 +52,10 @@ typedef struct response
     /**
      * @brief The message body.
      */
-    char* message;
+    string_t message;
 
     // ! PRIVATES
-    const char* private(raw);
+    string_t private(raw);
 
     // ? METHODS
     /**
@@ -63,7 +63,7 @@ typedef struct response
      * @param response The object to serilized.
      * @return char* The serilized string.
      */
-    char* (*serialize)(const struct response* response);
+    string_t (*serialize)(const struct response* response);
 } response_t;
 
 /**
@@ -72,7 +72,7 @@ typedef struct response
  * @param raw_response The raw response message.
  * @return response_t* The response object.
  */
-response_t* response_parse(const char* raw_response);
+response_t* response_parse(string_t raw_response);
 
 /**
  * @brief Frees memory allocated bye the response object.

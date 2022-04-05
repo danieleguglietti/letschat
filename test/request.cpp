@@ -34,7 +34,7 @@ TEST(Request, Serializer) {
     string_t serialized = req->serialize(req);
 
     ASSERT_NE(serialized, nullptr);
-    EXPECT_LE(strlen(serialized), REQUEST_STRING_MAXLEN);
-    EXPECT_EQ(strlen(serialized), strlen(raw));
+    EXPECT_LE(strsize(serialized), REQUEST_STRING_MAXLEN);
+    EXPECT_EQ(strsize(serialized), strsize(raw));
     EXPECT_STREQ(serialized, raw);
 }
