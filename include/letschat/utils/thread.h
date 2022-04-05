@@ -13,12 +13,45 @@
 #   define __stdcall
 #endif
 
+#include <stdint.h>
+#include <stdbool.h>
+
 #define ROUTINE(name) ROUTINE_RETV __stdcall name(ROUTINE_ARGS args)
-typedef ROUTINE_RETV (__stdcall *routine_t)(ROUTINE_ARGS);
+
+#ifndef __PRIVATE_MODIFIER__
+#   define __PRIVATE_MODIFIER__(x) __##x
+#   define PRIVATE(x) __PRIVATE_MODIFIER__(x)
+#endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+typedef ROUTINE_RETV (__stdcall *routine_t)(ROUTINE_ARGS);
+
+typedef struct thread
+{
+    // * PUBLIC
+    /**
+     * @brief The ID of the thread.
+     */
+    int64_t id;
+    // ! PRIVATES
+    // ? METHODS
+    /**
+     * @brief Stop the current process waiting for the thread to finish.
+     */
+    ROUTINE_RETV (*join)(struct thread* thread);
+} thread_t;
+
+/**
+ * @brief Summon a new thread.
+ * 
+ * @param routine The routine to execute.
+ * @param args The arguments to pass to the routine.
+ * @return thread_t* The thread.
+ */
+thread_t* summon_thread(routine_t routine, ROUTINE_ARGS args);
 
 #ifdef __cplusplus
 }
