@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 #include <string>
 
-const char* raw = "Content-Type:application/json;Connection:keep-alive;Content-Length:12;";
+string_t raw = const_cast<string_t>("Content-Type:application/json;Connection:keep-alive;Content-Length:12;");
 constexpr int max_length = (HEADER_FIELD_MAXLEN * 2 + 2) * HEADERS_MAXCOUNT;
 
 TEST(Headers, Parser) {

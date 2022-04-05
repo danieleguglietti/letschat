@@ -11,14 +11,15 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "string.h"
 
 __BEGIN_DECLS
 
 
 typedef struct entry
 {
-    const char* key;
-    char* value;
+    string_t key;
+    string_t value;
 } entry_t;
 
 struct hashtable_iterator;
@@ -48,7 +49,7 @@ typedef struct hashtable
      * @param key The key to look for.
      * @return entry_t* The entry object.
      */
-    entry_t* (*get)(struct hashtable* table, const char* key);
+    entry_t* (*get)(struct hashtable* table, const string_t key);
     /**
      * @brief Adds a new entry in the hashtable, or updates the value if exists.
      * @param table The table where to set the entry in.
@@ -56,7 +57,7 @@ typedef struct hashtable
      * @param value The new value of the entry.
      * @return true if the entry has been set/updated.
      */
-    bool (*set)(struct hashtable* table, const char* key, char* value);
+    bool (*set)(struct hashtable* table, const string_t key, string_t value);
     /**
      * @brief Creates a new iterator for the table.
      * @param table The table to iterate over.

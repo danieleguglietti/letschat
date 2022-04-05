@@ -5,7 +5,7 @@
 #define FNV_OFFSET 14695981039346656037UL
 #define FNV_PRIME 1099511628211UL
 
-static uint64_t hash(const char* key)
+static uint64_t hash(const string_t key)
 {
     uint64_t hash = FNV_OFFSET;
 
@@ -20,7 +20,7 @@ static uint64_t hash(const char* key)
 
 #define GET_INDEX(key, table) (hash(key) & (table->__capacity - 1))
 
-static entry_t* get(hashtable_t* table, const char* key)
+static entry_t* get(hashtable_t* table, const string_t key)
 {
     uint32_t index = (uint32_t) GET_INDEX(key, table);
     entry_t** entries = table->__entries;
@@ -43,7 +43,7 @@ static entry_t* get(hashtable_t* table, const char* key)
     return NULL;
 }
 
-static entry_t* entry_new(const char* key, char* value)
+static entry_t* entry_new(const string_t key, string_t value)
 {
     entry_t* entry = malloc(sizeof *entry);
 
@@ -58,7 +58,7 @@ static entry_t* entry_new(const char* key, char* value)
     return entry;
 }
 
-static void set_entry(entry_t** entries, hashtable_t* table, const char* key, char* value)
+static void set_entry(entry_t** entries, hashtable_t* table, const string_t key, string_t value)
 {
     uint32_t index = (uint32_t) GET_INDEX(key, table);
 
@@ -111,7 +111,7 @@ static void resize(hashtable_t* table)
     table->__capacity = new_capacity;
 }
 
-static bool set(hashtable_t* table, const char* key, char* value)
+static bool set(hashtable_t* table, const string_t key, string_t value)
 {
     if (value == NULL)
         return false;

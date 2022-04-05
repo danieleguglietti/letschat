@@ -92,7 +92,7 @@ string_t subnstr(const string_t str, const uint64_t start, const uint64_t size)
 
 string_t strsplit(string_t* str, const char delim)
 {
-    if (*str == '\0')
+    if (**str == '\0')
     {
         return NULL;
     }
@@ -100,7 +100,9 @@ string_t strsplit(string_t* str, const char delim)
     int64_t index = strfind(*str, delim);
     if (index == -1)
     {
-        return NULL;
+        string_t tok = *str;
+        *str = NULL;
+        return tok;
     }
 
     string_t end = *str + index;

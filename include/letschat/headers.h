@@ -2,6 +2,7 @@
 #define __HEADERS__
 
 #include "utils/hashtable.h"
+#include "utils/string.h"
 
 __BEGIN_DECLS
 
@@ -17,15 +18,15 @@ typedef entry_t* header_t;
  * @param raw_headers The string to parse
  * @return headers_t The parsed hashtable
  */
-headers_t headers_parse(const char* raw_headers);
+headers_t headers_parse(const string_t raw_headers);
 
 /**
  * @brief Get a headers hashtable and serialize it into a raw headers list string.
  * 
  * @param headers The hashtable to serialize
- * @return char* The serialized headers list string
+ * @return string_t The serialized headers list string
  */
-char* headers_serialize(headers_t headers);
+string_t headers_serialize(headers_t headers);
 
 __END_DECLS
 

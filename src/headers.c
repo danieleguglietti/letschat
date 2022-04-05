@@ -1,24 +1,13 @@
 #include "letschat/headers.h"
 #include <stdlib.h>
-#include <string.h>
 #include <ctype.h>
 
-#define IS_LONGER(x) (strlen(x) > HEADER_FIELD_MAXLEN)
+#define IS_LONGER(x) (strsize(x) > HEADER_FIELD_MAXLEN)
 #define IS_NULL(x) (x == NULL)
 
 #define HEADER_STRING_LEN (HEADER_FIELD_MAXLEN * 2 + 2) * HEADERS_MAXCOUNT
 
-static char* strtrm(char* str) 
-{
-    size_t len = strlen(str);
-
-    while(isspace(str[len - 1])) --len;
-    while(*str && isspace(*str)) ++str, --len;
-
-    return strndup(str, len);
-}
-
-headers_t headers_parse(const char* raw_headers)
+headers_t headers_parse(const string_t raw_headers)
 {
     headers_t headers = hashtable_new();
     if (IS_NULL(headers))
@@ -26,14 +15,15 @@ headers_t headers_parse(const char* raw_headers)
         return NULL;
     }
 
-    char* src = strdup(raw_headers), *ctx;
+    char* src = dupstr(raw_headers);
+    char* start = src;
 
-    char* header = strtok_r(src, ";", &ctx);
+    char* header = strsplit(&src, ';');
 
     while (header != NULL)
     {
-        char* key = strtrm(strtok(header, ":"));
-        char* value = strtrm(strtok(NULL, ";"));
+        string_t key = strtrim(strsplit(&header, ':'));
+        string_t value = strtrim(strsplit(&header, 0));
 
         if (IS_NULL(key) || IS_NULL(value) || IS_LONGER(key) || IS_LONGER(value))
         {
@@ -44,9 +34,9 @@ headers_t headers_parse(const char* raw_headers)
             return NULL;
         }
 
-        headers->set(headers, key, value);
+        headers->set(headers, key,value);
 
-        header = strtok_r(NULL, ";", &ctx);
+        header = strsplit(&src, ';');
     }
 
     if (headers->size > HEADERS_MAXCOUNT)
@@ -56,13 +46,13 @@ headers_t headers_parse(const char* raw_headers)
         return NULL;
     }
 
-    free(src);
+    free(start);
     return headers;
 }
 
-char* headers_serialize(headers_t headers)
+string_t headers_serialize(headers_t headers)
 {
-    char* headers_str = calloc(HEADER_STRING_LEN, sizeof *headers_str);
+    string_t headers_str = strinit(1, 0);
     if (IS_NULL(headers_str))
     {
         return NULL;
@@ -81,27 +71,19 @@ char* headers_serialize(headers_t headers)
             return NULL;
         }
 
-        strcat(headers_str, current->key);
-        strcat(headers_str, ":");
-        strcat(headers_str, current->value);
-        strcat(headers_str, ";");
+        strapp(&headers_str, current->key);
+        strapp(&headers_str, ":");
+        strapp(&headers_str, current->value);
+        strapp(&headers_str, ";");
     }
 
-    if (strlen(headers_str) > HEADER_STRING_LEN)
+    if (strsize(headers_str) > HEADER_STRING_LEN)
     {
         free(it);
         free(headers_str);
-        return NULL;
-    }
-
-    char* new_headers = realloc(headers_str, strlen(headers_str) + 1);
-    if (IS_NULL(new_headers)) 
-    {
-        free(headers_str);
-        free(it);
         return NULL;
     }
 
     free(it);
-    return new_headers;
+    return headers_str;
 }
