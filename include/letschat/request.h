@@ -48,18 +48,18 @@ typedef struct request
     /**
      * @brief The message sender username. 
      */
-    char* username;
+    string_t username;
     /**
      * @brief The message channel.
      */
-    char* channel;
+    string_t channel;
     /**
      * @brief The message body.
      */
-    char* message;
+    string_t message;
 
     // ! PRIVATES
-    const char* private(raw);
+    string_t private(raw);
 
     // ? METHODS
     /**
@@ -67,7 +67,7 @@ typedef struct request
      * @param request The object to serilized.
      * @return char* The serilized string.
      */
-    char* (*serialize)(const struct request* request);
+    string_t (*serialize)(const struct request* request);
 } request_t;
 
 /**
@@ -76,7 +76,7 @@ typedef struct request
  * @param raw_request The raw request message.
  * @return request_t* The request object.
  */
-request_t* request_parse(const char* raw_request);
+request_t* request_parse(string_t raw_request);
 
 /**
  * @brief Frees memory allocated bye the request object.

@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 #include <string>
 
-const char* raw = "SEND daniele@general [created_at:123123123;] Hi!";
+string_t raw = const_cast<string_t>("SEND daniele@general [created_at:123123123;] Hi!");
 
 constexpr int HEADER_STRING_LEN = (HEADER_FIELD_MAXLEN * 2 + 2) * HEADERS_MAXCOUNT;
 constexpr int REQUEST_STRING_MAXLEN =
@@ -31,7 +31,7 @@ TEST(Request, Serializer) {
 
     ASSERT_NE(req, nullptr);
 
-    const char* serialized = req->serialize(req);
+    string_t serialized = req->serialize(req);
 
     ASSERT_NE(serialized, nullptr);
     EXPECT_LE(strlen(serialized), REQUEST_STRING_MAXLEN);

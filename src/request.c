@@ -1,9 +1,9 @@
 #include "letschat/request.h"
 #include <stdlib.h>
-#include <string.h>
 
-#define IS_LONGER(x, MAX) (strlen(x) > MAX)
+#define IS_LONGER(x, MAX) (strsize(x) > MAX)
 #define IS_NULL(x) (x == NULL)
+#define NOT_NULL(x) (x != NULL)
 
 #define HEADER_STRING_LEN (HEADER_FIELD_MAXLEN * 2 + 2) * HEADERS_MAXCOUNT
 #define REQUEST_STRING_MAXLEN (\
@@ -14,7 +14,7 @@
     (MESSAGE_MAXLEN + 1)\
 )
 
-static char* command_serialize(const command_t command)
+static string_t command_serialize(const command_t command)
 {
     switch (command)
     {
@@ -31,59 +31,52 @@ static char* command_serialize(const command_t command)
     }
 }
 
-static char* serialize(const request_t* request)
+static string_t serialize(const request_t* request)
 {
-    char* request_str = calloc(REQUEST_STRING_MAXLEN, sizeof *request_str);
+    string_t request_str = strinit(1, 0);
     if (IS_NULL(request_str))
     {
         return NULL;
     }
 
-    strcat(request_str, command_serialize(request->command));
-    strcat(request_str, " ");
+    strapp(&request_str, command_serialize(request->command));
+    strapp(&request_str, " ");
 
-    strcat(request_str, request->username);
-    strcat(request_str, "@");
-    strcat(request_str, request->channel);
-    strcat(request_str, " [");
+    strapp(&request_str, request->username);
+    strapp(&request_str, "@");
+    strapp(&request_str, request->channel);
+    strapp(&request_str, " [");
 
-    char* headers_str = headers_serialize(request->headers);
+    string_t headers_str = headers_serialize(request->headers);
     if (IS_NULL(headers_str))
     {
         free(request_str);
         return NULL;
     }
 
-    strcat(request_str, headers_str);
-    strcat(request_str, "] ");
+    strapp(&request_str, headers_str);
+    strapp(&request_str, "] ");
 
-    strcat(request_str, request->message);
+    strapp(&request_str, request->message);
 
-    char* new_request = realloc(request_str, strlen(request_str) + 1);
-    if (IS_NULL(new_request))
-    {
-        free(request_str);
-        return NULL;
-    }
-
-    return new_request;
+    return request_str;
 }
 
-static command_t command_parse(const char* raw_command)
+static command_t command_parse(string_t raw_command)
 {
-    if (strcasecmp(raw_command, "CONNECT") == 0)
+    if (streq_nocase(raw_command, "CONNECT"))
     {
         return CONNECT;
     }
-    else if (strcasecmp(raw_command, "DISCONNECT") == 0)
+    else if (streq_nocase(raw_command, "DISCONNECT"))
     {
         return DISCONNECT;
     }
-    else if (strcasecmp(raw_command, "SEND") == 0)
+    else if (streq_nocase(raw_command, "SEND"))
     {
         return SEND;
     }
-    else if (strcasecmp(raw_command, "BROADCAST") == 0)
+    else if (streq_nocase(raw_command, "BROADCAST"))
     {
         return BROADCAST;
     }
@@ -93,35 +86,36 @@ static command_t command_parse(const char* raw_command)
     }
 }
 
-request_t* request_parse(const char* raw_request)
+request_t* request_parse(string_t raw_request)
 {
     request_t* request = malloc(sizeof *request);
     request->__raw = raw_request;
     request->serialize = serialize;
 
-    char* src = strdup(raw_request);
+    string_t src = dupstr(raw_request);
+    string_t start = src;
 
-    char* command = strtok_r(src, " ", &src);
+    string_t command = strsplit(&src, ' ');
     if (IS_NULL(command))
     {
         request_free(request);
-        free(src);
+        free(start);
         return NULL;
     }
 
-    char* username = strtok_r(src, "@", &src);
+    string_t username = strsplit(&src, '@');
     if (IS_NULL(username) || IS_LONGER(username, USERNAME_MAXLEN))
     {
         request_free(request);
-        free(src);
+        free(start);
         return NULL;
     }
 
-    char* channel = strtok_r(src, " ", &src);
+    string_t channel = strsplit(&src, ' ');
     if (IS_NULL(channel) || IS_LONGER(channel, CHANNEL_MAXLEN))
     {
         request_free(request);
-        free(src);
+        free(start);
         return NULL;
     }
 
@@ -129,13 +123,13 @@ request_t* request_parse(const char* raw_request)
 
     if (*src != ']')
     {
-        char* raw_header = strtok_r(src, "]", &src);
+        string_t raw_header = strsplit(&src, ']');
         headers_t headers = headers_parse(raw_header);
 
         if (IS_NULL(headers))
         {
             request_free(request);
-            free(src);
+            free(start);
             return NULL;
         }
 
@@ -144,11 +138,11 @@ request_t* request_parse(const char* raw_request)
 
     src++;
 
-    char* message = strtok_r(src, "\0", &src);
+    string_t message = strsplit(&src, 0);
     if (IS_NULL(message) || IS_LONGER(message, MESSAGE_MAXLEN))
     {
         request_free(request);
-        free(src);
+        free(start);
         return NULL;
     }
 
@@ -167,22 +161,22 @@ void request_free(request_t* request)
         return;
     }
 
-    if (request->headers != NULL)
+    if (NOT_NULL(request->headers))
     {
         hashtable_free(request->headers);
     }
 
-    if (request->username != NULL)
+    if (NOT_NULL(request->username))
     {
         free(request->username);
     }
 
-    if (request->channel != NULL)
+    if (NOT_NULL(request->channel))
     {
         free(request->channel);
     }
 
-    if (request->message != NULL)
+    if (NOT_NULL(request->message))
     {
         free(request->message);
     }
