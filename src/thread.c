@@ -1,6 +1,4 @@
 #include "letschat/utils/thread.h"
-#include <bits/pthreadtypes.h>
-#include <pthread.h>
 #include <stdlib.h>
 
 #define IS_NULL(x) (x == NULL)
@@ -37,6 +35,7 @@ static void suspend(thread_t* thread)
 #ifdef _WIN32
     SuspendThread(thread->PRIVATE(handle));
 #else
+    // TODO: Implement POSIX-Like Thread Suspension.
 #endif
 }
 
@@ -45,6 +44,7 @@ static void resume(thread_t* thread)
 #ifdef _WIN32
     ResumeThread(thread->PRIVATE(handle));
 #else
+    // TODO: Implement POSIX-Like Thread Resume.
 #endif
 }
 
@@ -79,4 +79,20 @@ thread_t* summon_thread(routine_t routine, ROUTINE_ARGS args)
 #endif
     
     return thread;
+}
+
+void thread_free(thread_t* thread)
+{
+#ifdef _WIN32
+    CloseHandle(thread->PRIVATE(handle));
+#else
+    thread->status = NULL;
+#endif
+
+    thread->join = NULL;
+    thread->cancel = NULL;
+    thread->resume = NULL;
+    thread->suspend = NULL;
+
+    free(thread);
 }
