@@ -73,6 +73,13 @@ typedef struct thread
      * @param thread The thread to detach.
      */
     void (*detach)(struct thread* thread);
+
+    /**
+     * @brief Free the memory allocated for the thread.
+     * 
+     * @param thread The thread to free.
+     */
+    void (*close)(struct thread* thread);
 } thread_t;
 
 typedef struct mutex
@@ -97,6 +104,13 @@ typedef struct mutex
      * @param thread The mutex to release the thread is locked to.
      */
     void (*release)(struct mutex* mutex);
+
+    /**
+     * @brief Destroy the mutex.
+     * 
+     * @param mutex The mutex to destroy.
+     */
+    void (*destroy)(struct mutex* mutex);
 } mutex_t;
 
 /**
@@ -109,25 +123,11 @@ typedef struct mutex
 thread_t* summon_thread(routine_t routine, ROUTINE_ARGS args);
 
 /**
- * @brief Free the memory allocated for the thread.
- * 
- * @param thread The thread to free.
- */
-void thread_free(thread_t* thread);
-
-/**
  * @brief Initialize a new mutex.
  * 
  * @return mutex_t The new mutex.
  */
 mutex_t* mutex_init();
-
-/**
- * @brief Destroy the mutex.
- * 
- * @param mutex The mutex to destroy.
- */
-void mutex_destroy(mutex_t* mutex);
 
 #ifdef __cplusplus
 }

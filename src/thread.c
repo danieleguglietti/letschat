@@ -40,6 +40,20 @@ static void detach(thread_t* thread)
 #endif // _WIN32
 }
 
+static void thread_free(thread_t* thread)
+{
+#ifdef _WIN32
+    CloseHandle(thread->PRIVATE(handle));
+#else
+    thread->status = NULL;
+#endif // _WIN32
+
+    thread->join = NULL;
+    thread->cancel = NULL;
+
+    free(thread);
+}
+
 thread_t* summon_thread(routine_t routine, ROUTINE_ARGS args)
 {
     thread_t* thread = (thread_t*) malloc(sizeof *thread);
@@ -51,6 +65,7 @@ thread_t* summon_thread(routine_t routine, ROUTINE_ARGS args)
     thread->join = join;
     thread->cancel = cancel;
     // thread->detach = detach;
+    thread->close = thread_free;
 #ifdef _WIN32
     thread->PRIVATE(handle) = CreateThread(
         NULL,
@@ -72,20 +87,6 @@ thread_t* summon_thread(routine_t routine, ROUTINE_ARGS args)
     return thread;
 }
 
-void thread_free(thread_t* thread)
-{
-#ifdef _WIN32
-    CloseHandle(thread->PRIVATE(handle));
-#else
-    thread->status = NULL;
-#endif // _WIN32
-
-    thread->join = NULL;
-    thread->cancel = NULL;
-
-    free(thread);
-}
-
 static void lock(mutex_t* mutex)
 {
 #ifdef _WIN32
@@ -104,6 +105,22 @@ static void release(mutex_t* mutex)
 #endif // _WIN32
 }
 
+static void mutex_destroy(mutex_t* mutex)
+{
+#ifdef _WIN32
+    CloseHandle(mutex->PRIVATE(mutex));
+#else
+    pthread_mutex_destroy(&mutex->PRIVATE(mutex));
+#endif // _WIN32
+
+    mutex->lock = NULL;
+    mutex->release = NULL;
+    mutex->destroy = NULL;
+
+    free(mutex);
+}
+
+
 mutex_t* mutex_init() 
 {
     mutex_t* mutex = (mutex_t*) malloc(sizeof *mutex);
@@ -114,6 +131,7 @@ mutex_t* mutex_init()
 
     mutex->lock = lock;
     mutex->release = release;
+    mutex->destroy = mutex_destroy;
 
 #ifdef _WIN32
     mutex->PRIVATE(mutex) = CreateMutex(
@@ -126,18 +144,4 @@ mutex_t* mutex_init()
 #endif // _WIN32
 
     return mutex;
-}
-
-void mutex_destroy(mutex_t* mutex)
-{
-#ifdef _WIN32
-    CloseHandle(mutex->PRIVATE(mutex));
-#else
-    pthread_mutex_destroy(&mutex->PRIVATE(mutex));
-#endif // _WIN32
-
-    mutex->lock = NULL;
-    mutex->release = NULL;
-
-    free(mutex);
 }
