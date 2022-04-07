@@ -20,7 +20,7 @@
 #       define __stdcall
 #   endif
 #   define MUTEX pthread_mutex_t
-#endif
+#endif // _WIN32
 
 #include <stdint.h>
 #include <stdbool.h>

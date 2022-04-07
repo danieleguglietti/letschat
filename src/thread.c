@@ -15,7 +15,7 @@ static ROUTINE_RETV join(thread_t* thread)
     GetExitCodeThread(thread->PRIVATE(handle), &thread->status);
 #else
     pthread_join(thread->id, &thread->status);
-#endif
+#endif // _WIN32
 
     return thread->status;
 }
@@ -27,7 +27,7 @@ static void cancel(thread_t* thread)
     CloseHandle(thread->PRIVATE(handle));
 #else
     pthread_cancel(thread->id);
-#endif
+#endif // _WIN32
 }
 
 static void detach(thread_t* thread)
@@ -37,7 +37,7 @@ static void detach(thread_t* thread)
     #error "No detach support for windows yet."
 #else
     pthread_detach(thread->id);
-#endif
+#endif // _WIN32
 }
 
 thread_t* summon_thread(routine_t routine, ROUTINE_ARGS args)
@@ -67,7 +67,7 @@ thread_t* summon_thread(routine_t routine, ROUTINE_ARGS args)
         free(thread);
         return NULL;
     }
-#endif
+#endif // _WIN32
     
     return thread;
 }
@@ -78,7 +78,7 @@ void thread_free(thread_t* thread)
     CloseHandle(thread->PRIVATE(handle));
 #else
     thread->status = NULL;
-#endif
+#endif // _WIN32
 
     thread->join = NULL;
     thread->cancel = NULL;
@@ -98,7 +98,7 @@ static void lock(mutex_t* mutex)
 static void release(mutex_t* mutex)
 {
 #ifdef _WIN32
-    ReleasMutex(mutex->PRIVATE(mutex));
+    ReleaseMutex(mutex->PRIVATE(mutex));
 #else
     pthread_mutex_unlock(&mutex->PRIVATE(mutex));
 #endif // _WIN32
@@ -116,14 +116,14 @@ mutex_t* mutex_init()
     mutex->release = release;
 
 #ifdef _WIN32
-    __mutex->PRIVATE(mutex) = CreateMutex(
+    mutex->PRIVATE(mutex) = CreateMutex(
         NULL,
         FALSE,
         NULL
     );
 #else
     pthread_mutex_init(&mutex->PRIVATE(mutex), NULL);
-#endif
+#endif // _WIN32
 
     return mutex;
 }
@@ -134,7 +134,7 @@ void mutex_destroy(mutex_t* mutex)
     CloseHandle(mutex->PRIVATE(mutex));
 #else
     pthread_mutex_destroy(&mutex->PRIVATE(mutex));
-#endif
+#endif // _WIN32
 
     mutex->lock = NULL;
     mutex->release = NULL;
