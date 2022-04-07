@@ -53,7 +53,7 @@ static void thread_free(thread_t* thread)
     free(thread);
 }
 
-thread_t* summon_thread(routine_t routine, ROUTINE_ARGS args)
+thread_t* summon_thread(routine_t routine, void* args)
 {
     thread_t* thread = (thread_t*) malloc(sizeof *thread);
     if (IS_NULL(thread))
