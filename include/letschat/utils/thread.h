@@ -50,8 +50,28 @@ typedef struct thread
     // ? METHODS
     /**
      * @brief Stop the current process waiting for the thread to finish.
+     * @param thread The thread to wait for.
+     * @return The thread status.
      */
     ROUTINE_RETV (*join)(struct thread* thread);
+
+    /**
+     * @brief Cancel the execution of the thread.
+     * @param thread The thread to deattach.
+     */
+    void (*cancel)(struct thread* thread);
+
+    /**
+     * @brief Suspend the execution of the thread.
+     * @param thread The thread to suspend.
+     */
+    void (*suspend)(struct thread* thread);
+
+    /**
+     * @brief Resume the execution of the suspended thread.
+     * @param thread The thread to resume.
+     */
+    void (*resume)(struct thread* thread);
 } thread_t;
 
 /**
