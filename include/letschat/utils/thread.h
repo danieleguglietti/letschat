@@ -9,13 +9,11 @@
 #ifdef _WIN32
 #   include <windows.h>
 #   define ROUTINE_RETV DWORD
-#   define ROUTINE_ARGS LPVOID
 #   define MUTEX HANDLE
 #else
 #   include <pthread.h>
 #   include <unistd.h>
 #   define ROUTINE_RETV void*
-#   define ROUTINE_ARGS void*
 #   ifndef __stdcall
 #       define __stdcall
 #   endif
@@ -25,13 +23,13 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define ROUTINE(name) ROUTINE_RETV __stdcall name(ROUTINE_ARGS args)
+#define ROUTINE(name) ROUTINE_RETV __stdcall name(void* args)
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef ROUTINE_RETV (__stdcall *routine_t)(ROUTINE_ARGS);
+typedef ROUTINE_RETV (__stdcall *routine_t)(void*);
 typedef unsigned long threadid_t;
 typedef ROUTINE_RETV status_t;
 
@@ -120,7 +118,7 @@ typedef struct mutex
  * @param args The arguments to pass to the routine.
  * @return thread_t* The thread.
  */
-thread_t* summon_thread(routine_t routine, ROUTINE_ARGS args);
+thread_t* summon_thread(routine_t routine, void* args);
 
 /**
  * @brief Initialize a new mutex.
