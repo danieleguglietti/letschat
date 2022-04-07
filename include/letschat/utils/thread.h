@@ -10,6 +10,7 @@
 #   include <windows.h>
 #   define ROUTINE_RETV DWORD
 #   define ROUTINE_ARGS LPVOID
+#   define MUTEX HANDLE
 #else
 #   include <pthread.h>
 #   include <unistd.h>
@@ -18,6 +19,7 @@
 #   ifndef __stdcall
 #       define __stdcall
 #   endif
+#   define MUTEX pthread_mutex_t
 #endif
 
 #include <stdint.h>
@@ -66,19 +68,36 @@ typedef struct thread
     void (*cancel)(struct thread* thread);
 
     /**
-     * @brief Suspend the execution of the thread.
+     * @brief Detach the thread from the main thread.
      * 
-     * @param thread The thread to suspend.
+     * @param thread The thread to detach.
      */
-    void (*suspend)(struct thread* thread);
+    void (*detach)(struct thread* thread);
+} thread_t;
+
+typedef struct mutex
+{
+    // * PUBLIC
+    // ! PRIVATES
+    /**
+     * @brief The mutex.
+     */
+    MUTEX PRIVATE(mutex);
+    // ? METHODS
+    /**
+     * @brief Lock the mutex to the current thread.
+     * 
+     * @param mutex The mutex to lock the thread to.
+     */
+    void (*lock)(struct mutex* mutex);
 
     /**
-     * @brief Resume the execution of the suspended thread.
+     * @brief Release the ownership of the mutex from the current thread.
      * 
-     * @param thread The thread to resume.
+     * @param thread The mutex to release the thread is locked to.
      */
-    void (*resume)(struct thread* thread);
-} thread_t;
+    void (*release)(struct mutex* mutex);
+} mutex_t;
 
 /**
  * @brief Summon a new thread.
@@ -95,6 +114,20 @@ thread_t* summon_thread(routine_t routine, ROUTINE_ARGS args);
  * @param thread The thread to free.
  */
 void thread_free(thread_t* thread);
+
+/**
+ * @brief Initialize a new mutex.
+ * 
+ * @return mutex_t The new mutex.
+ */
+mutex_t* mutex_init();
+
+/**
+ * @brief Destroy the mutex.
+ * 
+ * @param mutex The mutex to destroy.
+ */
+void mutex_destroy(mutex_t* mutex);
 
 #ifdef __cplusplus
 }

@@ -30,21 +30,13 @@ static void cancel(thread_t* thread)
 #endif
 }
 
-static void suspend(thread_t* thread)
+static void detach(thread_t* thread)
 {
 #ifdef _WIN32
-    SuspendThread(thread->PRIVATE(handle));
+    // TODO: Add detach support for windows.
+    #error "No detach support for windows yet."
 #else
-    // TODO: Implement POSIX-Like Thread Suspension.
-#endif
-}
-
-static void resume(thread_t* thread)
-{
-#ifdef _WIN32
-    ResumeThread(thread->PRIVATE(handle));
-#else
-    // TODO: Implement POSIX-Like Thread Resume.
+    pthread_detach(thread->id);
 #endif
 }
 
@@ -58,8 +50,7 @@ thread_t* summon_thread(routine_t routine, ROUTINE_ARGS args)
 
     thread->join = join;
     thread->cancel = cancel;
-    thread->suspend = suspend;
-    thread->resume = resume;
+    // thread->detach = detach;
 #ifdef _WIN32
     thread->PRIVATE(handle) = CreateThread(
         NULL,
@@ -91,8 +82,62 @@ void thread_free(thread_t* thread)
 
     thread->join = NULL;
     thread->cancel = NULL;
-    thread->resume = NULL;
-    thread->suspend = NULL;
 
     free(thread);
+}
+
+static void lock(mutex_t* mutex)
+{
+#ifdef _WIN32
+    WaitForSingleObject(mutex->PRIVATE(mutex), INFINITE);
+#else
+    pthread_mutex_lock(&mutex->PRIVATE(mutex));
+#endif // _WIN32
+}
+
+static void release(mutex_t* mutex)
+{
+#ifdef _WIN32
+    ReleasMutex(mutex->PRIVATE(mutex));
+#else
+    pthread_mutex_unlock(&mutex->PRIVATE(mutex));
+#endif // _WIN32
+}
+
+mutex_t* mutex_init() 
+{
+    mutex_t* mutex = (mutex_t*) malloc(sizeof *mutex);
+    if (IS_NULL(mutex))
+    {
+        return NULL;
+    }
+
+    mutex->lock = lock;
+    mutex->release = release;
+
+#ifdef _WIN32
+    __mutex->PRIVATE(mutex) = CreateMutex(
+        NULL,
+        FALSE,
+        NULL
+    );
+#else
+    pthread_mutex_init(&mutex->PRIVATE(mutex), NULL);
+#endif
+
+    return mutex;
+}
+
+void mutex_destroy(mutex_t* mutex)
+{
+#ifdef _WIN32
+    CloseHandle(mutex->PRIVATE(mutex));
+#else
+    pthread_mutex_destroy(&mutex->PRIVATE(mutex));
+#endif
+
+    mutex->lock = NULL;
+    mutex->release = NULL;
+
+    free(mutex);
 }
