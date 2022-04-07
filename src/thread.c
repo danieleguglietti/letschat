@@ -33,8 +33,7 @@ static void cancel(thread_t* thread)
 static void detach(thread_t* thread)
 {
 #ifdef _WIN32
-    // TODO: Add detach support for windows.
-    #error "No detach support for windows yet."
+    CloseHandle(thread->PRIVATE(handle));
 #else
     pthread_detach(thread->id);
 #endif // _WIN32
