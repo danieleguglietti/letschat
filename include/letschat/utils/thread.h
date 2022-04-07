@@ -28,6 +28,8 @@ extern "C" {
 #endif
 
 typedef ROUTINE_RETV (__stdcall *routine_t)(ROUTINE_ARGS);
+typedef unsigned long threadid_t;
+typedef ROUTINE_RETV status_t;
 
 typedef struct thread
 {
@@ -35,8 +37,16 @@ typedef struct thread
     /**
      * @brief The ID of the thread.
      */
-    int64_t id;
+    threadid_t id;
+
+    /**
+     * @brief The status returned from the thread.
+     */
+    status_t status;
     // ! PRIVATES
+#ifdef _WIN32
+    HANDLE PRIVATE(handle);
+#endif
     // ? METHODS
     /**
      * @brief Stop the current process waiting for the thread to finish.

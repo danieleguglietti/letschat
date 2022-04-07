@@ -11,6 +11,7 @@ set(sources ${sources}
     ${CMAKE_SOURCE_DIR}/src/hashtable.c
     ${CMAKE_SOURCE_DIR}/src/headers.c
     ${CMAKE_SOURCE_DIR}/src/string.c
+    ${CMAKE_SOURCE_DIR}/src/thread.c
 )
 
 add_library(letschat STATIC ${sources})
