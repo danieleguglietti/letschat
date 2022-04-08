@@ -39,8 +39,9 @@ static void detach(thread_t* thread)
 #endif // _WIN32
 }
 
-static void thread_free(thread_t* thread)
+static void thread_free(thread_t** thread_ptr)
 {
+    thread_t* thread = *thread_ptr;
 #ifdef _WIN32
     CloseHandle(thread->PRIVATE(handle));
     thread->PRIVATE(handle) = NULL;
@@ -54,6 +55,7 @@ static void thread_free(thread_t* thread)
     thread->close   = NULL;
 
     free(thread);
+    *thread_ptr = NULL;
 }
 
 thread_t* summon_thread(routine_t routine, void* args)
@@ -107,8 +109,10 @@ static void release(mutex_t* mutex)
 #endif // _WIN32
 }
 
-static void mutex_destroy(mutex_t* mutex)
+static void mutex_destroy(mutex_t** mutex_ptr)
 {
+    mutex_t* mutex = *mutex_ptr;
+
 #ifdef _WIN32
     CloseHandle(mutex->PRIVATE(mutex));
 #else
@@ -120,6 +124,8 @@ static void mutex_destroy(mutex_t* mutex)
     mutex->destroy = NULL;
 
     free(mutex);
+
+    *mutex_ptr = NULL;
 }
 
 

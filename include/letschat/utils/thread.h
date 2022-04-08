@@ -77,7 +77,7 @@ typedef struct thread
      * 
      * @param thread The thread to free.
      */
-    void (*close)(struct thread* thread);
+    void (*close)(struct thread** thread);
 } thread_t;
 
 typedef struct mutex
@@ -108,7 +108,7 @@ typedef struct mutex
      * 
      * @param mutex The mutex to destroy.
      */
-    void (*destroy)(struct mutex* mutex);
+    void (*destroy)(struct mutex** mutex);
 } mutex_t;
 
 /**
