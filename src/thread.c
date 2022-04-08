@@ -43,12 +43,15 @@ static void thread_free(thread_t* thread)
 {
 #ifdef _WIN32
     CloseHandle(thread->PRIVATE(handle));
+    thread->PRIVATE(handle) = NULL;
 #else
     thread->status = NULL;
 #endif // _WIN32
 
-    thread->join = NULL;
-    thread->cancel = NULL;
+    thread->join    = NULL;
+    thread->cancel  = NULL;
+    thread->detach  = NULL;
+    thread->close   = NULL;
 
     free(thread);
 }
@@ -63,7 +66,7 @@ thread_t* summon_thread(routine_t routine, void* args)
 
     thread->join = join;
     thread->cancel = cancel;
-    // thread->detach = detach;
+    thread->detach = detach;
     thread->close = thread_free;
 #ifdef _WIN32
     thread->PRIVATE(handle) = CreateThread(
